@@ -1,0 +1,4 @@
+Project: tf-demo
+region: us-west-2
+key_name: tf-demo
+profile: default

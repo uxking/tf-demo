@@ -1,0 +1,27 @@
+- hosts: localhost
+  gather_facts: yes
+
+  tasks:
+    - name: Create an EC2 Key Pair
+      block:
+      - name: Set key pair name
+        set_fact:
+          key_name: "{{ Project }}"
+      - name: Create ec2 key pair
+        ec2_key:
+          name: "{{ key_name }}"
+          region: "{{ region }}"
+          state: present
+          profile: "{{ profile }}"
+        register: ec2_key_output
+      - name: Create key store directory
+        file:
+          path: "{{ ansible_facts.env.HOME }}/{{ Project | lower }}"
+          state: directory
+        register: userHomeDir
+      - name: Put key in directory
+        copy:
+          content: "{{ ec2_key_output.key.private_key }}"
+          dest: "{{ userHomeDir.path }}/{{ key_name }}.pem"
+          mode: 0400
+        when: ec2_key_output.changed
