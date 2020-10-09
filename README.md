@@ -19,14 +19,15 @@ cd tf-demo
 ```
 At a minium, modify the `main.tf` file and change the value for `current-public-ip` in the `module ec2-instance`. Use your public IP address or choose a more open CIDR block, otherwise you will not be able to ssh to the box.
 
-Also you must modify the `bucket-name` value passed in the `module s3-bucket` and `module ec2-instance`. Bucket names must be unique across all of AWS.
+Also you must modify the `bucket-name` value passed to `module s3-bucket` and `module ec2-instance`. Bucket names must be unique across all of AWS.
+Search for the following values in `main.tf`.
 ```
 current-public-ip = "<your public ip>"
 bucket-name = "<your bucket name>"
 ```
-You can also modify any of the variables and names passed in to suit you. Perhaps you don't want use "tf-demo" as the key pair name, or you want to use a different region, CIDR block, etc... You should be able too customize the deployment to needs.
+You can also modify any of the variables and names passed in to suit you. Perhaps you don't want use "tf-demo" as the key pair name, or you want to use a different region, CIDR block, etc... You should be able to customize the deployment to your needs.
 
-For our example the "bucket-name" is "tf-demo-2020" and our "keypair-name" is "tf-demo".
+_For our example the **"bucket-name"** is **"tf-demo-2020"** and our **"keypair-name"** is **"tf-demo".**_
 
 Once you have made your modifications, you should be ready to deploy.
 1. Run the ansible playbook to create a key pair for the EC2 instance.
@@ -35,6 +36,8 @@ Once you have made your modifications, you should be ready to deploy.
 4. Run apply to deploy
 5. ssh to the box 
 6. Verify you can access the S3 bucket
+
+Run the following:
 
 ```bash
 ansible-playbook playbook.yml --extra-vars "@playbook.vars.yml"
@@ -51,11 +54,11 @@ ec2-public-ip = <your ec2 instance IP>
 
 Once deployment is finished:
 
-ssh using the key pair stored in your home dir to the IP address printed in output from Terraform
+ssh to the IP address printed in output from Terraform using the key pair stored in your home dir 
 
 `ssh -i ~/tf-demo/tf-demo.pem ec2-user@<ec2-public-ip value from the Terraform output>`
 
-Once you are logged into the EC2 instance (remember to use the bucket name you created):
+Once you are logged into the EC2 instance (remember to change the bucket name to the bucket you created):
 
 ```bash
 aws s3 ls s3://tf-demo-2020
